@@ -19,7 +19,7 @@ const tabs=[...document.querySelectorAll('[data-tab]')];
 function activateTab(tab){tabs.forEach(t=>{const active=t===tab;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;document.querySelector(`#panel-${t.dataset.tab}`).hidden=!active})}
 tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>activateTab(tab));tab.addEventListener('keydown',e=>{let next;if(e.key==='ArrowDown'||e.key==='ArrowRight')next=(i+1)%tabs.length;if(e.key==='ArrowUp'||e.key==='ArrowLeft')next=(i-1+tabs.length)%tabs.length;if(e.key==='Home')next=0;if(e.key==='End')next=tabs.length-1;if(next!==undefined){e.preventDefault();activateTab(tabs[next]);tabs[next].focus()}})});
 const cases={
-digital:{tag:'DIGITAL ENABLEMENT / RIXOS BAB AL BAHR',title:'Making development visible to leaders.',lead:'An in-house learning platform designed and developed to connect the learning experience with the decisions hotel leaders need to make.',sections:[['Leadership challenge','Development requires more than a calendar. Leaders need a connected view of participation, learning evidence and areas requiring follow up, while team members need a straightforward way to engage.'],['My contribution','Designed and developed the platform, bringing QR attendance, assessments, training approvals, compliance records and leadership dashboards into one experience.'],['Decisions it supports','Helps department heads identify who needs support, review completion evidence and assign follow up. The platform supports these decisions; development remains a shared responsibility with leaders.'],['How it is used','Departmental learning, daily huddles, nominations, assessments and reporting connect to a wider view of team development.']],evidenceTitle:'A connected system for leaders to act on',evidence:'Attendance, assessments, approvals and compliance records sit alongside department reporting. Leaders can review learning evidence and follow up on gaps with their teams.',note:'Rixos Bab Al Bahr · Digital learning and leadership insight.'},
+digital:{tag:'DIGITAL ENABLEMENT / IN-HOUSE LEARNING PLATFORM',title:'More time for people. Clearer insight for leaders.',lead:'I designed and developed a low-cost, in-house learning platform used with teams of up to 700 team members, connecting participation, learning evidence and leadership decisions.',sections:[['The operational challenge','Attendance sheets, separate quiz tools, nominations and reporting can create repeated work. Trainers need more time with people, and department heads need a clear view of learning needs and outstanding actions.'],['A connected workflow','QR attendance, learning hours, nominations and approvals, assessments, compliance records and certificates sit alongside department and individual reporting. Briefings, huddles and on-the-job learning bring everyday development into the same picture.'],['Efficiency for trainers and leaders','Connected records reduce repeated entry and the effort of consolidating information. Department leaders can review completion, quiz scores and pass rates, then focus coaching and refresher learning where support is needed.'],['A better experience for team members','Mobile access and QR entry make participation easier. Clear learning activities, daily huddles and self-paced quizzes fit more naturally around shifts and help colleagues take part with confidence.'],['The updated quiz experience','Live hosted and self-paced modes, simple code or QR joining, emoji avatars, countdowns, music, visual effects and leaderboards make quizzes more engaging. A simpler mobile home screen, clearer start controls, improved code entry and a full-screen host experience support smoother delivery.'],['Keeping operating costs low','Developed in house, the platform brings attendance, reporting and quizzes together to reduce the need for separate tools. Its value comes from simpler administration, reusable learning activities and more time available for coaching.']],evidenceTitle:'Used with teams of up to 700 team members',evidence:'A practical hospitality learning platform that connects participation, compliance evidence and leadership visibility. The interactive preview demonstrates selected workflows with sample content.',note:'The time-saving calculator uses adjustable assumptions, not measured results.'},
 talent:{tag:'TALENT & LEADERSHIP / CLUSTER AND PROPERTY EXPERIENCE',title:'Giving potential a path forward.',lead:'Development becomes meaningful when people can connect today’s role with tomorrow’s opportunity, and leaders stay involved in that journey.',sections:[['Leadership challenge','A programme can introduce new ideas. Progress also needs exposure, feedback and follow through from the leaders who work alongside the individual.'],['My contribution','At Yas Plaza Hotels, supported Yaspire career development and succession planning with the Director of Human Resources and department heads. Supported seven Emirati management trainees across Front Office and Human Resources.'],['Continuing the work','At Rixos Bab Al Bahr, coordinate leadership and career development programmes, partnering with department heads on nominations, cross training and individual development follow up.'],['My leadership approach','Make development a shared conversation. Clarify the opportunity, involve the leader, create room to practise and return to the individual’s progress.']],evidenceTitle:'A partnership with leaders and emerging talent',evidence:'Experience spans a six-hotel cluster and a luxury resort, combining career development, succession support and individual follow up.',note:'Yas Plaza Hotels and Rixos Bab Al Bahr · Career development and succession support.'},
 service:{tag:'CULTURE & GUEST EXPERIENCE / HOSPITALITY LEADERSHIP',title:'Turning guest insight into team capability.',lead:'My operational experience taught me that service culture is built in everyday decisions: how we listen, how we take ownership and how we support each other.',sections:[['Leadership challenge','Recurring guest concerns need more than a reminder. Leaders need to understand the gap, agree what good looks like and help teams practise a better response.'],['My contribution','Led weekly guest satisfaction reviews with department heads across voco Bonnington Dubai, Mövenpick JLT and Riva Beach Club, assigning coaching and corrective actions and reviewing follow up.'],['Connecting learning with culture','At Rixos Bab Al Bahr, build learning priorities from training needs, guest feedback and service audits. Facilitate service culture, service recovery and telephone handling programmes with departmental follow up.'],['Operational foundation','Years as a Duty Manager at Crowne Plaza Today Gurgaon built my judgement in guest recovery, shift leadership and cross-department coordination.']],evidenceTitle:'Quality audit results above 90%',evidence:'Supported through service audits, coaching and corrective action at the IHG operation in the Dubai cluster, and maintained during my Learning and Quality role at Crowne Plaza Today Gurgaon.',note:'Service quality is a team outcome. Explore an illustrative coaching scenario below.',scenario:true}
 };
@@ -28,3 +28,62 @@ function openCase(key,button){const c=cases[key];opener=button;content.replaceCh
 document.querySelectorAll('[data-case]').forEach(button=>button.addEventListener('click',()=>openCase(button.dataset.case,button)));
 document.querySelector('#close-dialog').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});dialog.addEventListener('close',()=>{document.body.classList.remove('modal-open');opener?.focus()});
 function addScenario(){const section=document.createElement('section');section.className='scenario';section.innerHTML='<h3>A moment to lead</h3><p>A guest has raised the same concern twice. Your team member is unsure what to do next. Which response best supports ownership?</p><div class="scenario-options"></div><p class="scenario-feedback" aria-live="polite">Choose a response to explore the coaching point.</p>';const options=[['Ask the team member to refer the guest to another department.','A referral may be needed, but passing the concern alone can leave both the guest and your team member without clear ownership. Agree who will follow through.'],['Understand the concern, agree an action and follow up together.','This combines empathy, clear ownership and coaching. The guest knows what will happen next, and the team member gains confidence through supported action.'],['Resolve it yourself and move on to the next task.','An immediate resolution can help the guest. Bring the team member into the reasoning and follow up afterwards so the experience also builds capability.']];const box=section.querySelector('.scenario-options');options.forEach(([label,feedback])=>{const b=document.createElement('button');b.textContent=label;b.setAttribute('aria-pressed','false');b.addEventListener('click',()=>{box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));section.querySelector('.scenario-feedback').textContent=feedback});box.append(b)});content.append(section)}
+
+
+const quizQuestions = [
+  {question:'A guest raises the same concern twice. What should happen next?', options:['Refer the guest elsewhere and move on.','Listen, agree an action and follow through.','Wait for the guest to ask again.'], correct:1, explanation:'Ownership means listening, agreeing the next action and following through. Involve the team member so the resolution also builds confidence.'},
+  {question:'Attendance is complete, but quiz results show a knowledge gap. What is the best next step?', options:['Mark the topic complete and move on.','Repeat every programme for everyone.','Coach the specific gap and check understanding again.'], correct:2, explanation:'Attendance shows participation. Use assessment evidence to focus coaching, then check understanding and practical application.'},
+  {question:'How can a departmental trainer make a short huddle more useful?', options:['Discuss one practical service situation and check understanding.','Read every policy aloud without discussion.','Focus only on recording attendance.'], correct:0, explanation:'A focused service example, a short discussion and a clear action make daily learning relevant to the shift ahead.'}
+];
+let quizIndex=0, quizScore=0, quizAnswered=false;
+const quizOptions=document.querySelector('#quiz-options');
+const quizNext=document.querySelector('#quiz-next');
+function renderQuiz(){
+  quizAnswered=false;
+  const q=quizQuestions[quizIndex];
+  document.querySelector('#quiz-progress').textContent=(quizIndex+1)+' / '+quizQuestions.length;
+  document.querySelector('#quiz-question').textContent=q.question;
+  document.querySelector('#quiz-feedback').textContent='Choose an answer to see the learning point.';
+  quizNext.hidden=true;
+  quizOptions.replaceChildren();
+  q.options.forEach((label,index)=>{
+    const button=document.createElement('button');
+    button.type='button';button.textContent=label;
+    button.addEventListener('click',()=>{
+      if(quizAnswered)return;quizAnswered=true;
+      if(index===q.correct)quizScore++;
+      [...quizOptions.children].forEach((option,i)=>{
+        option.disabled=true;
+        option.classList.toggle('correct',i===q.correct);
+        option.classList.toggle('incorrect',i===index&&index!==q.correct);
+      });
+      const final=quizIndex===quizQuestions.length-1;
+      document.querySelector('#quiz-feedback').textContent=(index===q.correct?'Correct. ':'Learning point: ')+q.explanation+(final?' Sample complete: '+quizScore+' of '+quizQuestions.length+' correct.':'');
+      quizNext.textContent=final?'Try again ↻':'Next question →';
+      quizNext.hidden=false;
+    });
+    quizOptions.append(button);
+  });
+}
+quizNext.addEventListener('click',()=>{
+  if(quizIndex===quizQuestions.length-1){quizIndex=0;quizScore=0}else{quizIndex++}
+  renderQuiz();quizOptions.querySelector('button').focus();
+});
+renderQuiz();
+document.querySelector('#try-quiz').addEventListener('click',()=>{
+  const tab=document.querySelector('#tab-quiz');activateTab(tab);
+  document.querySelector('.portal-demo').scrollIntoView({behavior:paused?'instant':'smooth',block:'start'});
+  tab.focus({preventScroll:true});
+});
+const calcFields=['calc-sessions','calc-people','calc-before','calc-after'].map(id=>document.getElementById(id));
+function calculateTime(){
+  const output=document.querySelector('#calc-result');
+  if(calcFields.some(input=>input.value.trim()===''||!input.checkValidity())){output.textContent='Enter valid values in all four fields.';return}
+  const [sessions,people,before,after]=calcFields.map(input=>Number(input.value));
+  const hours=sessions*people*(before-after)/60;
+  const formatted=new Intl.NumberFormat('en',{maximumFractionDigits:1}).format(Math.abs(hours));
+  output.textContent=hours>0?formatted+' hours / month potentially freed':hours<0?formatted+' additional hours / month with these assumptions':'No time saving with these assumptions';
+}
+calcFields.forEach(input=>input.addEventListener('input',calculateTime));
+calculateTime();
+
