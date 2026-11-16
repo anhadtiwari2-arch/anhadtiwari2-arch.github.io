@@ -75,3 +75,61 @@ dialog{padding:0;background:#f0eee6;color:var(--ink);border:0;border-radius:2px;
 @media(max-width:480px){.feature-grid{grid-template-columns:1fr}.feature-grid article{padding:23px}.feature-grid h4{font-size:20px}.platform-proof strong{font-size:21px}.project-digital .portal-content{padding:22px 17px}.project-digital .portal-tabs button{padding:8px;font-size:9px}.project-digital .portal-bar small{max-width:80px;text-align:right}.preview-rows>div{font-size:10px}.savings-result{font-size:19px}}
 
 
+
+/* Full-career explorer */
+.career-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:50px}
+.career-heading>p{max-width:360px;color:#b8c2ad;font-size:13px;line-height:1.9}
+.career-scope{display:grid;grid-template-columns:.75fr .65fr 1.2fr 1.4fr;gap:30px;margin:48px 0 54px}
+.career-scope>div{border-top:1px solid #566148;padding-top:23px}
+.career-scope strong{display:block;color:#d2dcbf;font-size:56px;font-weight:400;line-height:1.15;letter-spacing:-2px}
+.career-scope strong>span{font-size:25px;vertical-align:top}
+.career-scope>div:nth-child(n+3) strong{font-size:25px;line-height:1.35;letter-spacing:-.7px;max-width:240px}
+.career-scope p{font-size:11px;line-height:1.85;color:#b4bea8;margin-top:15px}
+.career-explorer{border:1px solid #4b5940;background:#1b2317}
+.career-explorer-heading{display:flex;justify-content:space-between;align-items:center;gap:32px;padding:32px 34px 24px}
+.career-explorer-heading .eyebrow{font-size:8px;letter-spacing:1.8px;color:var(--gold)}
+.career-explorer-heading h3{font-size:24px;line-height:1.4;letter-spacing:-.5px;font-weight:400;margin-top:12px}
+.career-explorer-heading>p{font-size:12px;color:#abb99e;max-width:290px;line-height:1.8}
+.career-filters{display:flex;flex-wrap:wrap;gap:8px;padding:0 34px 28px;border-bottom:1px solid #435338}
+.career-filters button{font-size:11px;min-height:44px;background:transparent;color:#c2cfb5;padding:10px 16px;border:1px solid #566649;border-radius:25px;transition:background .2s,color .2s}
+.career-filters button:hover{background:#35452a}
+.career-filters button[aria-pressed=true]{color:#203018;background:#d5dfc6;border-color:#d5dfc6}
+.career-explorer-body{display:grid;grid-template-columns:280px minmax(0,1fr);align-items:stretch}
+.career-chapters{display:flex;flex-direction:column;padding:18px;border-right:1px solid #435338;gap:6px}
+.career-chapters button{text-align:left;background:transparent;color:#bcc9af;padding:16px 18px;border-left:2px solid #455639;min-height:86px;transition:background .2s,color .2s}
+.career-chapters button>span{display:block;font-size:8px;letter-spacing:1.2px;color:#9eaf8d}
+.career-chapters strong{display:block;font-weight:400;font-size:14px;line-height:1.45;margin:7px 0 4px}
+.career-chapters small{display:block;font-size:10px;color:#9dae8b;line-height:1.6}
+.career-chapters button:hover{background:#293722}
+.career-chapters button[aria-pressed=true]{background:#34472a;color:#f0eee6;border-color:var(--gold)}
+.career-chapters button[aria-pressed=true]>span{color:var(--gold)}
+.career-chapters button[aria-pressed=true] small{color:#c1d0b3}
+.career-detail{background:#edf0e4;color:#27351f;padding:34px 38px;min-width:0;display:flex;flex-direction:column}
+.career-detail-top{display:flex;justify-content:space-between;gap:16px;font-size:9px;letter-spacing:1.1px;color:#60754d;line-height:1.7}
+.career-detail h3{font-size:32px;letter-spacing:-1px;font-weight:400;line-height:1.28;margin:20px 0 14px;max-width:650px}
+.career-role{font-size:12px;line-height:1.8;color:#657a52;max-width:650px}
+.career-story{font-size:13px;line-height:1.9;color:#405436;margin:20px 0}
+.career-contribution{padding:20px 22px;background:#dde5d0;border-left:2px solid #758e5e}
+.career-contribution .eyebrow{font-size:8px;letter-spacing:1.6px;color:#56723e}
+.career-contribution p{font-size:13px;line-height:1.85;color:#344e27;margin-top:8px}
+.career-evidence{margin-top:24px}
+.career-example{border-top:1px solid #bac9aa}
+.career-example:last-child{border-bottom:1px solid #bac9aa}
+.career-example summary{list-style:none;cursor:pointer;font-size:13px;line-height:1.6;font-weight:600;padding:16px 30px 16px 0;position:relative;min-height:48px}
+.career-example summary::-webkit-details-marker{display:none}
+.career-example summary:after{content:'+';position:absolute;right:3px;top:12px;color:#5f784c;font-size:22px;font-weight:400}
+.career-example[open] summary:after{content:'−'}
+.career-example summary:hover{color:#5f784c}
+.career-example summary:focus-visible{outline:2px solid #627c4e;outline-offset:3px}
+.career-example p{font-size:12px;color:#4f6440;line-height:1.85;padding:0 22px 18px 0}
+.career-controls{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-top:25px;margin-top:auto}
+.career-controls button{color:#3d572c;background:transparent;min-height:44px;font-size:11px;padding:8px 0;border-bottom:1px solid #99ad87}
+.career-controls button:hover:not(:disabled){color:#172b0d;border-color:#172b0d}
+.career-controls button:disabled{color:#8f9b85;border-color:transparent;cursor:default}
+.career-controls button:focus-visible{outline-color:#627c4e}
+.career-controls>span{font-size:10px;text-align:center;color:#627451}
+.career-nojs{padding:20px;color:#c7d4bb;font-size:13px}
+.career-nojs a{text-decoration:underline}
+@media(max-width:1100px){.career-heading{gap:35px}.career-heading>p{max-width:300px}.career-scope{gap:22px}.career-scope>div:nth-child(n+3) strong{font-size:23px}.career-explorer-body{grid-template-columns:235px minmax(0,1fr)}.career-chapters{padding:12px}.career-chapters button{padding:14px}.career-detail{padding:30px}.career-detail h3{font-size:29px}}
+@media(max-width:760px){.career-heading{display:block}.career-heading>p{max-width:none;margin-top:23px;font-size:12px}.career-scope{grid-template-columns:1fr 1fr;gap:25px 22px;margin:32px 0}.career-scope strong{font-size:46px}.career-scope p{font-size:10px;margin-top:10px}.career-scope>div:nth-child(n+3) strong{font-size:22px}.career-explorer-heading{display:block;padding:25px 22px 20px}.career-explorer-heading h3{font-size:23px}.career-explorer-heading>p{font-size:12px;margin-top:14px;max-width:none}.career-filters{padding:0 20px 22px;gap:7px}.career-filters button{font-size:10px;padding:9px 12px}.career-explorer-body{display:block}.career-chapters{display:grid;grid-template-columns:1fr 1fr;border-right:0;border-bottom:1px solid #435338;padding:13px;gap:7px}.career-chapters button{padding:12px;min-height:103px}.career-chapters strong{font-size:12px}.career-chapters small{font-size:9px}.career-chapters button>span{font-size:7px;letter-spacing:.7px}.career-detail{padding:25px 22px}.career-detail-top{font-size:8px;letter-spacing:.5px;flex-wrap:wrap;gap:6px}.career-detail h3{font-size:28px}.career-role{font-size:11px}.career-story,.career-contribution p{font-size:12px}.career-contribution{padding:18px}.career-example summary{font-size:12px}.career-example p{font-size:12px}.career-controls{gap:12px;flex-wrap:wrap}.career-controls>span{font-size:9px;order:-1;width:100%;text-align:left}.career-controls button{font-size:11px}.career-controls #career-next{margin-left:auto}}
+

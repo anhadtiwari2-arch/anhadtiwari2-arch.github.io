@@ -87,3 +87,139 @@ function calculateTime(){
 calcFields.forEach(input=>input.addEventListener('input',calculateTime));
 calculateTime();
 
+const careerChapters = {
+  overview: {
+    period:'2016 / PRESENT', location:'INDIA & THE UAE',
+    title:'An operational foundation. A wider people perspective.',
+    role:'Guest operations → Learning & quality → People Development',
+    story:'My career connects the realities of hotel operations with the systems and leadership habits that help people succeed. Experience across individual hotels and clusters allows me to see both the detail of a shift and the wider development agenda.',
+    contribution:'A practical understanding of service, experience partnering with department heads and the ability to turn development priorities into everyday action.',
+    focus:[],
+    evidence:[
+      ['Close to the operation','Guest recovery, shift leadership and service reviews shaped my approach to learning: start with real situations, make expectations clear and support people as they practise.'],
+      ['Across properties and teams','My experience spans graduate development, hotel operations, learning and quality, cluster talent development and property People Development. Each setting strengthened my ability to work with leaders and adapt to different team needs.'],
+      ['From learning to visible progress','Career development, succession support, digital learning adoption and an in-house learning platform connect development activity with evidence, follow up and leadership decisions.']
+    ]
+  },
+  foundation: {
+    period:'JUN 2016 / NOV 2017',location:'KOCHI · INDIA',
+    title:'Learning hospitality from the inside.',
+    role:'InterContinental Graduate · Crowne Plaza Kochi',
+    story:'Structured cross training across hotel operations built my understanding of the guest journey and the contribution each department makes to a consistent experience.',
+    contribution:'A whole-hotel perspective and respect for the people behind every part of the guest experience.',
+    focus:['operations','learning'],
+    evidence:[
+      ['Cross-department exposure','Built an understanding of hotel operations through a structured graduate programme and cross training.'],
+      ['The guest journey','Learned to see service as a connected experience, with departmental coordination influencing the outcome for the guest.'],
+      ['What this means today','I design learning with operational context, helping colleagues understand how their role connects with the wider hotel.']
+    ]
+  },
+  operations: {
+    period:'DEC 2017 / NOV 2022',location:'GURGAON · INDIA',
+    title:'From leading the shift to developing the team.',
+    role:'Duty Manager → Assistant Manager, Learning & Quality · Crowne Plaza Today Gurgaon',
+    story:'Operational leadership and guest recovery gave me a practical foundation before moving into a dedicated Learning and Quality role in June 2022.',
+    contribution:'The judgement to connect learning with real service challenges, and the confidence to support teams when the operation is under pressure.',
+    focus:['operations','learning'],
+    evidence:[
+      ['Operational leadership','Duty Manager experience developed my judgement in guest recovery, shift leadership and coordination across departments.'],
+      ['The move into learning','Progressed into Learning and Quality in June 2022, bringing operational experience into team development and service standards.'],
+      ['Quality in everyday practice','Service audits, coaching and corrective action connected learning priorities with the experience delivered to guests.']
+    ]
+  },
+  cluster: {
+    period:'NOV 2022 / AUG 2024',location:'ABU DHABI · UAE',
+    title:'Developing people across a wider operation.',
+    role:'Cluster Assistant Manager, Learning & Engagement · Yas Plaza Hotels by Aldar Hospitality',
+    story:'Supported learning and colleague engagement across six hotels, working with the Director of Human Resources and department heads on development, digital learning adoption and career opportunities.',
+    contribution:'The ability to coordinate across properties while keeping development relevant to each team and individual.',
+    focus:['learning','talent','digital'],
+    evidence:[
+      ['Career development & succession','Supported Yaspire career development and succession planning with HR leadership and department heads.'],
+      ['Emerging talent','Supported seven Emirati management trainees across Front Office and Human Resources, connecting development with practical exposure.'],
+      ['Learning adoption & recognition','Supported digital learning adoption and colleague engagement across the cluster. Recognised as Manager of the Year in 2023.']
+    ]
+  },
+  quality: {
+    period:'AUG 2024 / MAR 2025',location:'DUBAI · UAE',
+    title:'Turning guest insight into learning priorities.',
+    role:'Cluster Learning & Quality Manager · voco, Mövenpick & Riva',
+    story:'Aligned learning and quality priorities across three operations, using guest feedback, service reviews and departmental follow up to focus development on real needs.',
+    contribution:'A disciplined connection between guest insight, coaching and the actions leaders take with their teams.',
+    focus:['operations','learning'],
+    evidence:[
+      ['Guest satisfaction reviews','Led weekly reviews with department heads across voco Bonnington Dubai, Mövenpick JLT and Riva Beach Club.'],
+      ['Coaching & corrective action','Connected recurring guest concerns with coaching and corrective actions, then reviewed departmental follow up.'],
+      ['Working across different operations','Aligned learning priorities across three operations while keeping guest experience and department leadership at the centre.']
+    ]
+  },
+  people: {
+    period:'MAR 2025 / PRESENT',location:'RAS AL KHAIMAH · UAE',
+    title:'Connecting people, leaders and digital development.',
+    role:'People Development · Current role: Manager, People Development',
+    story:'Lead the property development agenda, connecting learning needs with service priorities, leadership capability and the systems that help departments take ownership.',
+    contribution:'A people development approach that combines human support, operational relevance and clear evidence for leaders.',
+    focus:['learning','talent','digital'],
+    evidence:[
+      ['Leadership & career development','Coordinate leadership and career development programmes with department heads, including nominations, cross training and individual development follow up.'],
+      ['Learning systems & visibility','Designed and developed an in-house learning platform connecting participation, assessments, compliance records and leadership reporting. Explore the digital case study for the platform features and quiz experience.'],
+      ['Service culture & daily learning','Build priorities from training needs, guest feedback and service audits. Connect service learning, departmental trainers and daily huddles with practical follow up.']
+    ]
+  }
+};
+const careerButtons=[...document.querySelectorAll('[data-career]')];
+const careerFilters=[...document.querySelectorAll('[data-career-filter]')];
+let careerFocus='all', careerActive='overview';
+function visibleCareerKeys(){return careerButtons.filter(button=>!button.hidden).map(button=>button.dataset.career)}
+function renderCareer(key){
+  const chapter=careerChapters[key];careerActive=key;
+  careerButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.career===key)));
+  for(const [id,value] of Object.entries({
+    'career-period':chapter.period,'career-location':chapter.location,
+    'career-detail-title':chapter.title,'career-role':chapter.role,
+    'career-story':chapter.story,'career-contribution':chapter.contribution
+  }))document.getElementById(id).textContent=value;
+  const evidence=document.querySelector('#career-evidence');evidence.replaceChildren();
+  chapter.evidence.forEach(([heading,description],index)=>{
+    const details=document.createElement('details');details.className='career-example';
+    if(index===0)details.open=true;
+    const summary=document.createElement('summary');summary.textContent=heading;
+    const paragraph=document.createElement('p');paragraph.textContent=description;
+    details.append(summary,paragraph);evidence.append(details);
+  });
+  const keys=visibleCareerKeys(),index=keys.indexOf(key);
+  document.querySelector('#career-prev').disabled=index===0;
+  document.querySelector('#career-next').disabled=index===keys.length-1;
+  document.querySelector('#career-next').textContent=key==='overview'?'Explore chapters →':'Next →';
+  document.querySelector('#career-position').textContent=key==='overview'?'Career overview · 5 chapters':careerFocus==='all'?'Chapter '+index+' of 5':(index+1)+' of '+keys.length+' relevant chapters';
+}
+careerFilters.forEach(button=>button.addEventListener('click',()=>{
+  careerFocus=button.dataset.careerFilter;
+  careerFilters.forEach(filter=>filter.setAttribute('aria-pressed',String(filter===button)));
+  careerButtons.forEach(chapter=>{
+    chapter.hidden=careerFocus!=='all'&&!careerChapters[chapter.dataset.career].focus.includes(careerFocus);
+  });
+  const keys=visibleCareerKeys();
+  renderCareer(careerFocus==='all'?'overview':keys.includes(careerActive)?careerActive:keys[0]);
+}));
+careerButtons.forEach(button=>{
+  button.addEventListener('click',()=>renderCareer(button.dataset.career));
+  button.addEventListener('keydown',event=>{
+    const keys=visibleCareerKeys(),index=keys.indexOf(button.dataset.career);
+    let next;
+    if(event.key==='ArrowDown'||event.key==='ArrowRight')next=(index+1)%keys.length;
+    if(event.key==='ArrowUp'||event.key==='ArrowLeft')next=(index-1+keys.length)%keys.length;
+    if(event.key==='Home')next=0;
+    if(event.key==='End')next=keys.length-1;
+    if(next!==undefined){event.preventDefault();renderCareer(keys[next]);careerButtons.find(item=>item.dataset.career===keys[next]).focus()}
+  });
+});
+for(const [id,direction] of [['career-prev',-1],['career-next',1]]){
+  document.getElementById(id).addEventListener('click',()=>{
+    const keys=visibleCareerKeys(),next=keys.indexOf(careerActive)+direction;
+    if(next>=0&&next<keys.length)renderCareer(keys[next]);
+  });
+}
+renderCareer('overview');
+
+
