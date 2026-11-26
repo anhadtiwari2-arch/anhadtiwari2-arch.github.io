@@ -21,3 +21,9 @@ test('completed learning requires valid date and numeric duration',()=>{const {d
 test('learning import matches employee and hotel together',()=>{const {db,admin}=fixture();assert.match(validateImport(parseCSV(learning+'LM,SH-001,New course,Completed,60,2026-11-20'),'records',db,admin).errors.join(' '),/not in this hotel/);});
 test('one invalid row prevents approval of the batch',()=>{const {db,admin}=fixture();const r=validateImport(parseCSV(roster+'SH,X,Demo,FO,2026-11-01\nXX,Y,Demo,FO,2026-11-01'),'people',db,admin);assert.equal(r.items.length,1);assert.equal(r.errors.length,1);});
 test('spreadsheet export escapes formulas and quotes',()=>{assert.equal(csvCell('=1+1'),'"\'=1+1"');assert.equal(csvCell('A"B'),'"A""B"');});
+
+import {recoveryDestination} from '../core.mjs';
+test('recovery destination comes only from the saved account email',()=>{const {db,member}=fixture();assert.equal(recoveryDestination(db,'SH','SH-003'),member.email);assert.notEqual(recoveryDestination(db,'SH','SH-003'),'attacker@example.invalid');});
+test('recovery binds the employee identity to the selected hotel',()=>{const {db}=fixture();assert.equal(recoveryDestination(db,'LM','SH-003'),null);});
+test('recovery rejects suspended, revoked or email-less accounts',()=>{const {db,member}=fixture();member.active=false;assert.equal(recoveryDestination(db,'SH','SH-003'),null);member.active=true;member.hotels=[];assert.equal(recoveryDestination(db,'SH','SH-003'),null);member.hotels=['SH'];delete member.email;assert.equal(recoveryDestination(db,'SH','SH-003'),null);});
+test('ambiguous recovery identity cannot choose an arbitrary email',()=>{const {db,member}=fixture();db.accounts.push({...member,id:'duplicate',email:'other@example.invalid'});assert.equal(recoveryDestination(db,'SH','SH-003'),null);});

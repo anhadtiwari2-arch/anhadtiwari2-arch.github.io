@@ -1,8 +1,8 @@
 export const hotels=[
-{id:'SH',name:'Sheraton Abu Dhabi Hotel & Resort',short:'Sheraton Abu Dhabi',brand:'SHERATON',place:'ABU DHABI · CORNICHE',image:'sheraton.jpg',accent:'#805953'},
-{id:'LM',name:'Le Méridien Abu Dhabi Resort',short:'Le Méridien Abu Dhabi',brand:'LE MÉRIDIEN',place:'ABU DHABI · AL ZAHIYAH',image:'meridien.jpg',accent:'#8b7757'},
-{id:'RC',name:'Radisson Blu Hotel & Resort, Abu Dhabi Corniche',short:'Radisson Blu Corniche',brand:'RADISSON BLU',place:'ABU DHABI · CORNICHE',image:'corniche.jpg',accent:'#436f80'},
-{id:'RA',name:'Radisson Blu Hotel & Resort, Al Ain',short:'Radisson Blu Al Ain',brand:'RADISSON BLU',place:'AL AIN · AL SAROOJ',image:'alain.jpg',accent:'#537564'}];
+{id:'SH',name:'Sheraton Abu Dhabi Hotel & Resort',short:'Sheraton Abu Dhabi',brand:'SHERATON',place:'ABU DHABI · CORNICHE',image:'sheraton-full.jpg',accent:'#805953'},
+{id:'LM',name:'Le Méridien Abu Dhabi Resort',short:'Le Méridien Abu Dhabi',brand:'LE MÉRIDIEN',place:'ABU DHABI · AL ZAHIYAH',image:'meridien-full.jpg',accent:'#8b7757'},
+{id:'RC',name:'Radisson Blu Hotel & Resort, Abu Dhabi Corniche',short:'Radisson Blu Corniche',brand:'RADISSON BLU',place:'ABU DHABI · CORNICHE',image:'corniche-full.jpg',accent:'#436f80'},
+{id:'RA',name:'Radisson Blu Hotel & Resort, Al Ain',short:'Radisson Blu Al Ain',brand:'RADISSON BLU',place:'AL AIN · AL SAROOJ',image:'alain-full.jpg',accent:'#537564'}];
 export const roles={admin:'System administrator',cluster:'Cluster leadership',hotel:'Hotel People & Culture',trainer:'Departmental trainer',member:'Team member'};
 export const courses=['Welcome to our hotel','Service from the heart','Safety essentials'];
 export function seed(){
@@ -21,3 +21,12 @@ export function validateImport(rows,kind,db,user){const required=kind==='people'
  else{if(!db.people.some(p=>p.id===r.employee_id&&p.hotel===r.hotel_id))e.push('employee is not in this hotel roster');if(!['Completed','Assigned','Overdue'].includes(r.status))e.push('status must be Completed, Assigned or Overdue');if(!Number.isFinite(Number(r.duration_minutes))||Number(r.duration_minutes)<=0||Number(r.duration_minutes)>1440)e.push('duration_minutes must be between 1 and 1440');if(r.status==='Completed'&&!validDate(r.completion_date))e.push('completed learning needs a valid completion_date');if(r.status==='Completed'&&r.completion_date>new Date().toISOString().slice(0,10))e.push('completion date cannot be in the future');if(db.records.some(x=>x.employee===r.employee_id&&x.hotel===r.hotel_id&&x.course===r.course))e.push('learning record already exists');}
  if(e.length)errors.push(`Row ${i+2}: ${e.join('; ')}`);else items.push(r);});return {errors,items};}
 export function csvCell(v){let s=String(v??'');if(/^[=+@\-\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';}
+
+// Demo only: destination is read from the account, never from recovery form input.
+export function recoveryDestination(db, hotelId, employeeId){
+ const id=String(employeeId||'').trim().toUpperCase();
+ const matches=db.accounts.filter(a=>a.active&&a.employeeHotel===hotelId&&a.employee===id&&a.hotels.includes(hotelId));
+ if(matches.length!==1)return null;
+ const email=matches[0].email;
+ return typeof email==='string'&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)?email:null;
+}

@@ -11,7 +11,7 @@ Four-property, static interactive demonstration, created 26 November 2026.
 
 ## What works in the demonstration
 
-Property-specific photography; five role views; linked colleague learning histories; trainer plans; calendar session creation; capacity-controlled nominations; hotel + employee-ID + sample-password login; required recovery-email and confirm-password sign-up screens; sample sign-up matching and administrator approval; a forgot-password demonstration; grants and revocation; account suspension; explicitly simulated password reset; local activity history; CSV templates, validation, preview and confirmed append-only imports; scoped CSV exports; three visual themes.
+Property-specific photography; five role views; linked colleague learning histories; trainer plans; calendar session creation; capacity-controlled nominations; hotel + employee-ID + sample-password login; required recovery-email and confirm-password sign-up screens; sample sign-up matching and administrator approval; an employee-ID-only forgot-password demonstration that resolves its destination exclusively from the saved account email; grants and revocation; account suspension; explicitly simulated password reset; local activity history; CSV templates, validation, preview and confirmed append-only imports; scoped CSV exports; three visual themes.
 
 All 24 initial colleagues and their learning records are synthetic. Test changes persist in localStorage on one browser. No emails are sent. Only the published sample password `Demo@2026` is accepted; entered passwords are never stored. Recovery emails are restricted to fictional `@example.invalid` addresses in this demonstration. No paid services, API keys, payment details or billing accounts are connected. The existing GitHub Pages portfolio remains untouched outside the new `adnh-learning` directory.
 
@@ -47,4 +47,7 @@ Local desktop browser checks exercised the login view, cluster overview, colleag
 
 ## Assets
 
-Property images originate from the ADNH owned hotels page, https://www.adnh.com/contents/hotels/11, and remain the property of their respective owners. They illustrate the user's requested concept and are credited in the interface. The Century Gothic font files reuse the user's existing repository assets. Review branding and image permissions before an official rollout.
+Property images originate from the official Marriott and Radisson hotel galleries listed in `image-sources.html`, and remain the property of their respective owners. They illustrate the user's requested concept and are credited in the interface. The Century Gothic font files reuse the user's existing repository assets. Review branding and image permissions before an official rollout.
+
+Photo update: native source sizes are 4000 × 2667 (Sheraton), 2400 × 1602 (Le Méridien), 3840 × 2560 (Corniche), and 3840 × 2558 (Al Ain), served from the original JPEG files at full dimensions.
+Recovery never accepts a destination email from the form. A real implementation must also verify ownership of the on-file email, use single-use expiring tokens, throttle requests and return a uniform response. Changes to the registered recovery email require separate identity verification, with a People & Culture process for colleagues who have lost mailbox access.
