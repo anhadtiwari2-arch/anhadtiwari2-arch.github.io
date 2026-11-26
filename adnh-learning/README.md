@@ -51,3 +51,15 @@ Property images originate from the official Marriott and Radisson hotel gallerie
 
 Photo update: native source sizes are 4000 × 2667 (Sheraton), 2400 × 1602 (Le Méridien), 3840 × 2560 (Corniche), and 3840 × 2558 (Al Ain), served from the original JPEG files at full dimensions.
 Recovery never accepts a destination email from the form. A real implementation must also verify ownership of the on-file email, use single-use expiring tokens, throttle requests and return a uniform response. Changes to the registered recovery email require separate identity verification, with a People & Culture process for colleagues who have lost mailbox access.
+
+## Rixos-style management dashboards
+
+The management screens follow the reviewed Rixos dashboard structure: reporting period and department filters, total/average hours, learning participation, onboarding and mandatory-training indicators, top departments, OJT/off-job/online breakdowns, department comparisons, smart/full view, monthly submissions and a six-month evidence view.
+
+System Admin and Cluster HR can see their assigned cluster. Hotel HR, GMs and Hotel Managers see assigned properties. HOD and trainer views are limited to assigned departments and properties; member records remain self-only. GMs and Hotel Managers have read-only management views. Admins can adjust a HOD or trainer's assigned department as well as property access.
+
+The monthly submission demonstration supports Draft → Submitted → Reviewed → Accepted, with role-checked transitions and required review notes. Returns for correction are recorded. Approval never creates learning hours. Real workflow notifications are not connected.
+
+Monthly and YTD totals use completion dates and the same records as exports. Current active roster headcount is labelled explicitly; historical snapshots are not invented. Blank historical months and missing quiz/feedback evidence are shown as unavailable. No ADNH monthly target is assumed. Existing local demo data is migrated from version 2 to version 3 without resetting imports, requests, access changes or audit history.
+
+Department meetings and daily huddles are excluded from ADNH navigation and dashboards at the user’s request.
