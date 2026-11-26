@@ -12,7 +12,7 @@ export function seed(){
  return upgradeDemo({version:2,people,records,sessions,accounts:[{id:'admin',name:'Demo Administrator',role:'admin',hotels:hotels.map(h=>h.id),active:true},{id:'cluster',name:'Demo Cluster Leader',role:'cluster',hotels:hotels.map(h=>h.id),active:true},...hotels.flatMap(h=>['hotel','trainer','member'].map(role=>({id:role+(h.id==='SH'?'':'-'+h.id),name:role==='hotel'?'Demo Hotel Leader · '+h.id:role==='trainer'?'Demo Trainer · '+h.id:people.find(p=>p.id===h.id+'-003').name,role,hotels:[h.id],employee:role==='hotel'?null:h.id+(role==='member'?'-003':'-001'),employeeHotel:h.id,email:role==='hotel'?'leader@example.invalid':people.find(p=>p.id===h.id+(role==='member'?'-003':'-001')).email,department:role==='member'?'Housekeeping':'Front Office',active:true}))) ],requests:[],audit:[],nominations:[]});
 }
 export function canHotel(user,id){return !!user?.active&&(user.role==='admin'||user.hotels.includes(id));}
-export function visiblePeople(db,user,hotel='all'){return db.people.filter(p=>canHotel(user,p.hotel)&&(hotel==='all'||hotel===p.hotel)&&(user.role!=='member'||(p.id===user.employee&&p.hotel===user.employeeHotel))&&(!['trainer','hod'].includes(user.role)||p.department===user.department));}
+export function visiblePeople(db,user,hotel='all'){hotel=resolveHotelScope(user,hotel);return db.people.filter(p=>canHotel(user,p.hotel)&&(hotel==='all'||hotel===p.hotel)&&(user.role!=='member'||(p.id===user.employee&&p.hotel===user.employeeHotel))&&(!['trainer','hod'].includes(user.role)||p.department===user.department));}
 export function visibleRecords(db,user,hotel='all'){const ids=new Set(visiblePeople(db,user,hotel).map(p=>p.hotel+'|'+p.id));return db.records.filter(r=>ids.has(r.hotel+'|'+r.employee));}
 export function metrics(db,user,hotel='all'){const people=visiblePeople(db,user,hotel).filter(p=>p.active),ids=new Set(people.map(p=>p.hotel+'|'+p.id)),rs=visibleRecords(db,user,hotel).filter(r=>ids.has(r.hotel+'|'+r.employee));return {people:people.length,hours:rs.filter(r=>r.status==='Completed').reduce((n,r)=>n+r.minutes/60,0),completion:rs.length?Math.round(rs.filter(r=>r.status==='Completed').length/rs.length*100):0,overdue:rs.filter(r=>r.status==='Overdue').length,trainers:people.filter(p=>p.trainer).length};}
 export function parseCSV(text){let rows=[],row=[],v='',quote=false;for(let i=0;i<text.length;i++){let c=text[i];if(c==='"'){if(quote&&text[i+1]==='"'){v+='"';i++;}else quote=!quote;}else if(c===','&&!quote){row.push(v);v='';}else if((c==='\n'||c==='\r')&&!quote){if(c==='\r'&&text[i+1]==='\n')i++;row.push(v);if(row.some(x=>x.trim()))rows.push(row);row=[];v='';}else v+=c;}if(quote)throw Error('Unclosed quotation mark in CSV.');row.push(v);if(row.some(x=>x.trim()))rows.push(row);if(!rows.length)throw Error('This file is empty.');rows[0][0]=rows[0][0].replace(/^\uFEFF/,'');return rows;}
@@ -69,3 +69,46 @@ export function submissionActions(user,s){
  return [];
 }
 export function transitionSubmission(db,user,id,to,reason){const s=(db.submissions||[]).find(x=>x.id===id);if(!s||!submissionActions(user,s).includes(to)||!String(reason||'').trim())throw Error('This action is not permitted or its review note is missing.');const before=s.status;s.status=to;s.updated=new Date().toISOString();return {before,after:to,hotel:s.hotel,department:s.department,month:s.month};}
+
+// Explicit cluster view is the only view allowed to combine properties.
+export function resolveHotelScope(user,requested){
+ if(!user?.active)return 'none';
+ if(requested==='all'&&['admin','cluster'].includes(user.role))return 'all';
+ if(requested!=='all')return hotels.some(h=>h.id===requested)&&canHotel(user,requested)?requested:'none';
+ return hotels.find(h=>canHotel(user,h.id))?.id||'none';
+}
+export function scopedSessions(db,user,hotel,department='all'){
+ hotel=resolveHotelScope(user,hotel);
+ const dep=['hod','trainer','member'].includes(user?.role)?user.department:department;
+ return db.sessions.filter(s=>canHotel(user,s.hotel)&&(hotel==='all'||s.hotel===hotel)&&(dep==='all'||s.department===dep));
+}
+export function scopedNominees(db,user,session,department='all'){
+ return managementPeople(db,user,session.hotel,department).filter(p=>p.department===session.department);
+}
+export function validateWorkspaceImport(rows,kind,db,user,hotel,department='all'){
+ const result=validateImport(rows,kind,db,user);
+ if(hotel==='all'||!hotels.some(h=>h.id===hotel)||!canHotel(user,hotel))result.errors.push('Select one authorised hotel before uploading.');
+ for(const r of result.items){
+  if(r.hotel_id!==hotel)result.errors.push('Every row must belong to the selected hotel: '+hotel);
+  const dep=kind==='people'?r.department:db.people.find(p=>p.hotel===r.hotel_id&&p.id===r.employee_id)?.department;
+  if(department!=='all'&&dep!==department)result.errors.push('Every row must belong to the selected department: '+department);
+ }
+ return result;
+}
+export function scopedAccounts(db,user,hotel,department='all'){
+ if(user?.role!=='admin')return [];
+ if(hotel==='all')return department==='all'?db.accounts:[];
+ return db.accounts.filter(a=>(a.hotels.includes(hotel)||a.employeeHotel===hotel)&&(!['admin','cluster'].includes(a.role))&&(department==='all'||a.department===department));
+}
+export function scopedRequests(db,user,hotel,department='all'){
+ if(user?.role!=='admin')return [];
+ return db.requests.filter(r=>(hotel==='all'||r.hotel===hotel)&&(department==='all'||db.people.some(p=>p.hotel===r.hotel&&p.id===r.employee&&p.department===department)));
+}
+export function scopedAudit(db,user,hotel,department='all'){
+ hotel=resolveHotelScope(user,hotel);
+ const dep=['hod','trainer','member'].includes(user?.role)?user.department:department;
+ return db.audit.filter(a=>{
+  const h=a.hotel||hotels.find(h=>a.target===h.id||a.target.startsWith(h.id+'/'))?.id;
+  return (hotel==='all'?(h?canHotel(user,h):['admin','cluster'].includes(user.role)):h===hotel&&canHotel(user,h))&&(dep==='all'||a.department===dep);
+ });
+}
